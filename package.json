@@ -2,7 +2,9 @@
   "name": "hono",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc --noEmit",
+    "start": "tsx src/index.ts"
   },
   "dependencies": {
     "hono": "^4.13.2"
