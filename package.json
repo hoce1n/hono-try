@@ -1,9 +1,6 @@
 {
   "name": "hono",
   "type": "module",
-  "scripts": {
-    "dev": "tsx watch src/index.ts"
-  },
   "dependencies": {
     "hono": "^4.13.2"
   },
