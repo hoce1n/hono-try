@@ -18,6 +18,21 @@ app.get('/', (c) => {
   return c.html(renderPage(card));
 });
 
+app.get('/create', (c) => c.html(renderCreatePage()));
+
+app.get('/cards/custom', (c) => {
+  const card = createCustomCard({
+    question: c.req.query('question'),
+    success: c.req.query('success'),
+    yes: c.req.query('yes'),
+    no: c.req.query('no'),
+    theme: c.req.query('theme'),
+  });
+  const shareUrl = new URL(`/cards/custom?${createShareQuery(card)}`, c.req.url).toString();
+
+  return c.html(renderPage(card, { shareUrl }));
+});
+
 app.get('/cards/:cardId', (c) => {
   const card = getCardById(c.req.param('cardId'));
 

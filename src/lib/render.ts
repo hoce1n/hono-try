@@ -7,7 +7,11 @@ function serializeClientConfig(config: unknown): string {
   return JSON.stringify(config).replace(/</g, "\\u003C");
 }
 
-export function renderPage(card: Card): string {
+export type RenderPageOptions = {
+  shareUrl?: string;
+};
+
+export function renderPage(card: Card, options: RenderPageOptions = {}): string {
   const theme = resolveTheme(card.theme);
   const themeDefinition = themeDefinitions[theme];
   const themeStyle = Object.entries(themeDefinition.cssVariables)
@@ -20,6 +24,14 @@ export function renderPage(card: Card): string {
       colors: themeDefinition.confettiColors,
     },
   });
+  const sharePanel = options.shareUrl
+    ? `
+          <section class="share-panel" aria-labelledby="shareCardHeading">
+            <h2 id="shareCardHeading">Your shareable link</h2>
+            <p>Copy this link to share your card.</p>
+            <input aria-label="Shareable card link" type="url" readonly value="${escapeHtml(options.shareUrl)}">
+          </section>`
+    : "";
 
   return `
     <!DOCTYPE html>
@@ -47,7 +59,7 @@ export function renderPage(card: Card): string {
           <section class="success-message" id="successMsg" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden>
             ${escapeHtml(card.successMessage)}
           </section>
-        </main>
+        </main>${sharePanel}
         <footer class="credits-footer" aria-label="Creator credits">
           <span>built by hocein</span>
           <span aria-hidden="true">·</span>
