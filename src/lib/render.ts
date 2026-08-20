@@ -1,13 +1,25 @@
 import { cardExperience } from "../config/experience.js";
+import { resolveTheme, themeDefinitions } from "../config/themes.js";
 import type { Card } from "../types/card.js";
 import { escapeHtml } from "./escape.js";
 
 export function renderPage(card: Card): string {
-  const experience = JSON.stringify(cardExperience);
+  const theme = resolveTheme(card.theme);
+  const themeDefinition = themeDefinitions[theme];
+  const themeStyle = Object.entries(themeDefinition.cssVariables)
+    .map(([property, value]) => `${property}: ${value};`)
+    .join(" ");
+  const experience = JSON.stringify({
+    ...cardExperience,
+    confetti: {
+      ...cardExperience.confetti,
+      colors: themeDefinition.confettiColors,
+    },
+  });
 
   return `
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="en" data-theme="${theme}" style="color-scheme: ${themeDefinition.colorScheme}; ${themeStyle}">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
