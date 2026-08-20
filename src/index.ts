@@ -1,5 +1,7 @@
 import { Hono } from 'hono'
 import { renderPage } from './lib/render.js'
+import { renderCreatePage } from './lib/render-create.js'
+import { createCustomCard, createShareQuery } from './lib/custom-card.js'
 import { getCardById } from './config/cards.js'
 import { defaultCard } from './config/defaults.js'
 import type { Card } from './types/card.js'
@@ -15,6 +17,21 @@ app.get('/', (c) => {
   };
 
   return c.html(renderPage(card));
+});
+
+app.get('/create', (c) => c.html(renderCreatePage()));
+
+app.get('/cards/custom', (c) => {
+  const card = createCustomCard({
+    question: c.req.query('question'),
+    success: c.req.query('success'),
+    yes: c.req.query('yes'),
+    no: c.req.query('no'),
+    theme: c.req.query('theme'),
+  });
+  const shareUrl = new URL(`/cards/custom?${createShareQuery(card)}`, c.req.url).toString();
+
+  return c.html(renderPage(card, { shareUrl }));
 });
 
 app.get('/cards/:cardId', (c) => {
