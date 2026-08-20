@@ -47,6 +47,14 @@ export function renderPage(card: Card): string {
             ${escapeHtml(card.successMessage)}
           </section>
         </main>
+        <footer class="credits-footer" aria-label="Creator credits">
+          <span>built by hocein</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://github.com/hoce1n">GitHub</a>
+          <a href="https://www.linkedin.com/in/hocein/">LinkedIn</a>
+          <a href="https://instagram.com/hoce1n">Instagram</a>
+          <a href="https://t.me/hoce1n">Telegram</a>
+        </footer>
         <script id="cardExperienceConfig" type="application/json">${clientConfig}</script>
       </body>
     </html>
