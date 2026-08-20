@@ -1,5 +1,7 @@
 import { Hono } from 'hono'
 import { renderPage } from './lib/render.js'
+import { renderCreatePage } from './lib/render-create.js'
+import { createCustomCard, createShareQuery } from './lib/custom-card.js'
 import { renderNotFoundPage } from './lib/render-not-found.js'
 import { getCardById } from './config/cards.js'
 import { defaultCard } from './config/defaults.js'
