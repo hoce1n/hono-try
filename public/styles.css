@@ -32,7 +32,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.75rem;
+  gap: clamp(1rem, 3vw, 1.25rem);
   overflow-x: clip;
   padding: clamp(1rem, 4vw, 2.5rem);
   background: var(--page-background);
@@ -148,6 +148,14 @@ button:focus-visible {
   opacity: 0.82;
 }
 
+#noBtn.is-tap-dodging {
+  transform: translateX(var(--no-button-dodge-x, 0)) scale(var(--no-button-scale));
+}
+
+#noBtn.is-declined {
+  opacity: 0.66;
+}
+
 .success-message {
   color: var(--text-primary);
   font-size: clamp(1.8rem, 6vw, 3rem);
@@ -205,12 +213,11 @@ button:focus-visible {
 
 @media (max-width: 30rem) {
   body {
-    justify-content: flex-start;
-    padding: 1rem;
+    justify-content: center;
+    padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
   }
 
   .container {
-    margin-top: max(1rem, env(safe-area-inset-top));
     border-radius: 1.25rem;
   }
 
