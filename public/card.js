@@ -18,8 +18,11 @@
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
+  const canHover = window.matchMedia("(hover: hover)").matches;
+  const supportsPointerDodge = hasFinePointer && canHover;
   let attemptCount = 0;
   let pointerFrame = 0;
+  let tapDodgeTimer = 0;
   let pendingPointer = null;
 
   function clamp(value, minimum, maximum) {
@@ -88,6 +91,22 @@
     moveNoButton(targetX, targetY);
   }
 
+  function dodgeTapNoButton() {
+    shrinkNoButton();
+    noButton.style.setProperty("--no-button-dodge-x", attemptCount % 2 === 0 ? "0.75rem" : "-0.75rem");
+    noButton.classList.add("is-tap-dodging");
+
+    window.clearTimeout(tapDodgeTimer);
+    tapDodgeTimer = window.setTimeout(() => {
+      noButton.classList.remove("is-tap-dodging");
+    }, 240);
+  }
+
+  function acknowledgeNoButton() {
+    shrinkNoButton();
+    noButton.classList.add("is-declined");
+  }
+
   function handlePointerMove(event) {
     pendingPointer = { x: event.clientX, y: event.clientY };
 
@@ -103,7 +122,7 @@
     });
   }
 
-  if (hasFinePointer && !prefersReducedMotion) {
+  if (supportsPointerDodge && !prefersReducedMotion) {
     document.addEventListener("pointermove", handlePointerMove, { passive: true });
     noButton.addEventListener("pointerenter", (event) => {
       dodgePointer(event.clientX, event.clientY);
@@ -113,9 +132,17 @@
   noButton.addEventListener("click", (event) => {
     event.preventDefault();
 
-    if (!prefersReducedMotion && hasFinePointer) {
-      teleportNoButton();
+    if (prefersReducedMotion) {
+      acknowledgeNoButton();
+      return;
     }
+
+    if (supportsPointerDodge) {
+      teleportNoButton();
+      return;
+    }
+
+    dodgeTapNoButton();
   });
 
   yesButton.addEventListener("click", () => {
