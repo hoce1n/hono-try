@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { renderPage } from './lib/render.js'
+import { renderNotFoundPage } from './lib/render-not-found.js'
 import { getCardById } from './config/cards.js'
 import { defaultCard } from './config/defaults.js'
 import type { Card } from './types/card.js'
@@ -26,5 +27,7 @@ app.get('/cards/:cardId', (c) => {
 
   return c.html(renderPage(card));
 });
+
+app.notFound((c) => c.html(renderNotFoundPage(), 404));
 
 export default app

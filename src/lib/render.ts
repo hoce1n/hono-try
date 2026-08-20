@@ -35,7 +35,8 @@ export function renderPage(card: Card): string {
         <title>${escapeHtml(card.pageTitle)}</title>
       </head>
       <body>
-        <main class="container" aria-labelledby="question">
+        <a class="skip-link" href="#mainContent">Skip to content</a>
+        <main class="container" id="mainContent" aria-labelledby="question">
           <section id="cardContent">
             <h1 id="question">${escapeHtml(card.question)}</h1>
             <div class="buttons" aria-label="${escapeHtml(card.responseOptionsLabel)}">
